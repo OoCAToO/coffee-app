@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Barista Wrist Pro - Ultra Accessibility</title>
+    <title>Barista Wrist Pro</title>
+    <!-- PWA 與移動端優化 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -13,65 +15,56 @@
             background-color: #000; 
             color: #fff; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
             overflow: hidden;
-            touch-action: manipulation;
+            touch-action: none; /* 禁用瀏覽器預設行為以支援自定義拖拽 */
             -webkit-user-select: none;
             user-select: none;
         }
-        
-        .watch-container {
+
+        /* 滿版容器 */
+        .app-container {
             width: 100vw;
             height: 100vh;
+            background: #000;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #000;
             position: relative;
         }
 
-        .scroll-area {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            padding: 40px 10px; 
-            text-align: center;
-            scrollbar-width: none;
+        /* 捲動區域與安全邊距 (自動適應圓形/方形螢幕) */
+        .scroll-area { 
+            width: 100%; 
+            height: 100%; 
+            overflow-y: auto; 
+            text-align: center; 
+            scrollbar-width: none; 
+            padding: 40px 12px; 
+            cursor: grab;
         }
-        .scroll-area::-webkit-scrollbar { display: none; }
         
-        /* 圓形螢幕適應 */
+        /* 圓形螢幕適應：自動增加內距以確保內容不被切邊 */
         @media (aspect-ratio: 1/1) {
-            .scroll-area {
-                padding-top: 55px;
-                padding-bottom: 55px;
-            }
+            .scroll-area { padding: 55px 22px; }
         }
+        
+        .scroll-area::-webkit-scrollbar { display: none; }
 
-        /* 主選單：置中與放大設計 */
-        .home-center-layout {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100%;
-        }
-
+        /* 元件樣式 */
         .main-menu-btn {
             background: #111;
-            padding: 20px 18px;
+            padding: 18px 15px;
             border-radius: 28px;
             margin-bottom: 14px;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px; 
+            gap: 15px; 
             border: 2px solid #222;
         }
         .main-menu-btn:active { border-color: #f97316; background: #222; }
 
-        /* 計算器專用：長型大按鈕 */
         .calc-long-btn {
             background: #1a1a1a;
             border: 3px solid #f97316;
@@ -84,11 +77,8 @@
             font-weight: bold;
             flex: 1;
             height: 75px;
-            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.2);
         }
-        .calc-long-btn:active { background: #f97316; color: #fff; transform: scale(0.95); }
 
-        /* 切換標籤 */
         .toggle-tab {
             background: #1a1a1a;
             padding: 4px;
@@ -98,32 +88,19 @@
             border: 2px solid #333;
             width: 100%;
         }
-        .toggle-btn {
-            padding: 12px 0;
+        .tbtn { padding: 12px 0; flex: 1; border-radius: 25px; font-size: 18px; font-weight: 900; color: #666; transition: 0.2s; }
+        .tbtn.active { background: #f97316; color: #fff; }
+
+        .calc-card {
+            background: #111;
+            border: 2px solid #222;
+            padding: 12px 2px;
+            border-radius: 22px;
             flex: 1;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 900;
-            color: #888;
         }
-        .toggle-btn.active {
-            background: #f97316;
-            color: #fff;
-        }
+        .active-coffee { border-color: #f97316 !important; background: rgba(249, 115, 22, 0.1) !important; }
+        .active-water { border-color: #3b82f6 !important; background: rgba(59, 130, 246, 0.1) !important; }
 
-        .close-btn {
-            background: #222;
-            color: #ff914d;
-            padding: 10px 30px;
-            border-radius: 20px;
-            font-size: 16px;
-            font-weight: 900;
-            margin-bottom: 20px;
-            display: inline-block;
-            border: 2px solid #333;
-        }
-
-        /* 列表與計時器按鈕 */
         .btn-action {
             width: 80px;
             height: 80px;
@@ -134,126 +111,98 @@
             background: #1a1a1a;
             border: 3px solid #333;
         }
-
-        .method-btn {
-            background: #111;
-            padding: 20px 18px;
-            border-radius: 22px;
-            margin-bottom: 10px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px; 
-            font-size: 24px;
-            font-weight: 900;
-            border: 1px solid #222;
-        }
-
-        .grind-item {
-            background: #111;
-            padding: 18px;
-            border-radius: 22px;
-            margin-bottom: 10px;
-            border: 1px solid #222;
-            text-align: center;
-        }
+        
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div id="app">
-        <div class="watch-container">
-            <!-- 頁面 1: 主選單 -->
-            <div id="home-page" class="scroll-area">
-                <div class="home-center-layout">
-                    <div class="text-orange-500 text-sm font-black mb-6 tracking-widest uppercase italic">BARISTA PRO</div>
-                    <div class="flex flex-col w-full px-2">
-                        <button onclick="router('calc')" class="main-menu-btn">
-                            <span class="text-6xl">⚖️</span>
-                            <span class="text-3xl font-black">計算器</span>
-                        </button>
-                        <button onclick="router('method')" class="main-menu-btn">
-                            <span class="text-6xl">☕</span>
-                            <span class="text-3xl font-black">選器具</span>
-                        </button>
-                        <button onclick="router('timer')" class="main-menu-btn">
-                            <span class="text-6xl">⏱️</span>
-                            <span class="text-3xl font-black">計時器</span>
-                        </button>
-                        <button onclick="router('grind')" class="main-menu-btn">
-                            <span class="text-6xl">⚙️</span>
-                            <span class="text-3xl font-black">研磨度</span>
-                        </button>
-                    </div>
+    <div class="app-container">
+        <!-- 頁面 1: 主選單 -->
+        <div id="page-home" class="page scroll-area">
+            <div class="flex flex-col justify-center items-center min-h-full">
+                <div class="text-orange-500 text-[11px] font-black mb-6 tracking-widest uppercase italic">BARISTA PRO</div>
+                <div class="flex flex-col w-full px-1">
+                    <button onclick="router('calc')" class="main-menu-btn">
+                        <span class="text-6xl">⚖️</span>
+                        <span class="text-3xl font-black">計算器</span>
+                    </button>
+                    <button onclick="router('timer')" class="main-menu-btn">
+                        <span class="text-6xl">⏱️</span>
+                        <span class="text-3xl font-black">計時器</span>
+                    </button>
+                    <button onclick="router('method')" class="main-menu-btn">
+                        <span class="text-6xl">☕</span>
+                        <span class="text-3xl font-black">選器具</span>
+                    </button>
+                    <button onclick="router('grind')" class="main-menu-btn">
+                        <span class="text-6xl">⚙️</span>
+                        <span class="text-3xl font-black">研磨度</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 頁面 2: 器具清單 -->
+        <div id="page-method" class="page scroll-area hidden">
+            <button onclick="router('home')" class="bg-zinc-800 text-orange-400 px-8 py-2 rounded-full text-base font-black mb-6 border border-zinc-700">返回</button>
+            <div id="method-list" class="space-y-3"></div>
+        </div>
+
+        <!-- 頁面 3: 計算器 -->
+        <div id="page-calc" class="page scroll-area hidden">
+            <button onclick="router('home')" class="bg-zinc-800 text-orange-400 px-8 py-2 rounded-full text-base font-black mb-6 border border-zinc-700">返回</button>
+            
+            <div class="toggle-tab">
+                <button id="tbtn-coffee" class="tbtn active" onclick="setCalcMode('coffee')">調粉</button>
+                <button id="tbtn-water" class="tbtn" onclick="setCalcMode('water')">調水</button>
+            </div>
+            
+            <div class="flex space-x-2 w-full mb-4">
+                <div id="card-coffee" class="calc-card active-coffee">
+                    <div class="text-[10px] text-zinc-500 font-black">COFFEE(g)</div>
+                    <div id="display-coffee" class="text-4xl font-black tabular-nums mt-1 text-orange-500">15</div>
+                </div>
+                <div id="card-water" class="calc-card">
+                    <div class="text-[10px] text-zinc-500 font-black">WATER(ml)</div>
+                    <div id="display-water" class="text-4xl font-black tabular-nums mt-1 text-zinc-500">225</div>
                 </div>
             </div>
 
-            <!-- 頁面 2: 器具選擇 -->
-            <div id="method-page" class="scroll-area hidden">
-                <button onclick="router('home')" class="close-btn">返回</button>
-                <div id="method-list" class="space-y-2"></div>
-                <div class="h-16"></div>
+            <div class="mb-6">
+                <div id="calc-method-tag" class="text-3xl font-black text-orange-500 italic uppercase leading-none">V60 (1:15)</div>
             </div>
 
-            <!-- 頁面 3: 雙向計算器 (全新長型按鈕佈局) -->
-            <div id="calc-page" class="scroll-area hidden">
-                <button onclick="router('home')" class="close-btn">返回</button>
-                
-                <div class="toggle-tab">
-                    <button id="mode-coffee" onclick="setCalcMode('coffee')" class="toggle-btn active">粉量</button>
-                    <button id="mode-water" onclick="setCalcMode('water')" class="toggle-btn">水量</button>
-                </div>
-
-                <!-- 輸入數字區域 -->
-                <div class="mb-4">
-                    <div id="input-label" class="text-xs text-zinc-500 font-black mb-1 uppercase">Input Coffee (g)</div>
-                    <div id="main-val" class="text-7xl font-black tabular-nums leading-none">15</div>
-                </div>
-
-                <!-- 目標結果區域 -->
-                <div class="bg-blue-600/20 p-5 rounded-[30px] border-2 border-blue-500/50 mb-6">
-                    <div id="result-label" class="text-sm text-blue-300 font-bold">目標水量 (ml)</div>
-                    <div id="result-val" class="text-6xl font-black text-white tabular-nums leading-none">225</div>
-                    <div id="calc-method-tag" class="text-sm text-blue-400 mt-2 font-black italic">V60 (1:15)</div>
-                </div>
-
-                <!-- 操作按鈕區域：放在目標水量下方 -->
-                <div class="flex space-x-3 w-full px-1">
-                    <button onclick="adjustValue(-1)" class="calc-long-btn">－</button>
-                    <button onclick="adjustValue(1)" class="calc-long-btn">＋</button>
-                </div>
-                
-                <div class="h-16"></div>
+            <div class="flex space-x-3 w-full px-1">
+                <button onclick="adjustValue(-1)" class="calc-long-btn">－</button>
+                <button onclick="adjustValue(1)" class="calc-long-btn">＋</button>
             </div>
+        </div>
 
-            <!-- 頁面 4: 計時器 -->
-            <div id="timer-page" class="scroll-area hidden">
-                <button onclick="router('home')" class="close-btn">返回</button>
-                <div class="flex flex-col space-y-1 mb-4 px-2">
-                    <div id="timer-target" class="text-xl font-black text-zinc-300">總水：225</div>
-                    <div id="timer-bloom" class="text-xl font-black text-orange-400">悶蒸：30</div>
-                </div>
-                <div id="timer-display" class="text-8xl font-mono font-black mb-4 tabular-nums text-white leading-none">00:00</div>
-                <div id="phase-text" class="text-2xl font-black text-orange-500 h-8 mb-8 uppercase">READY</div>
-                <div class="flex justify-center space-x-8">
-                    <button id="timer-btn" onclick="toggleTimer()" class="btn-action text-green-500 text-5xl">▶</button>
-                    <button onclick="resetTimer()" class="btn-action text-zinc-500 text-5xl">↺</button>
-                </div>
-                <div class="h-16"></div>
+        <!-- 頁面 4: 計時器 -->
+        <div id="page-timer" class="page scroll-area hidden">
+            <button onclick="router('home')" class="bg-zinc-800 text-orange-400 px-8 py-2 rounded-full text-base font-black mb-6 border border-zinc-700">返回</button>
+            <div class="flex flex-col items-center mb-1 leading-none">
+                <div class="text-[10px] font-black text-zinc-500 tracking-widest mb-2">TARGET WATER</div>
+                <div id="target-ml" class="text-6xl font-black text-orange-500 tabular-nums">30ml</div>
             </div>
+            <div id="timer-display" class="text-8xl font-mono font-black mb-2 tabular-nums text-white leading-none">00:00</div>
+            <div id="phase-text" class="text-2xl font-black text-zinc-400 h-8 mb-8 uppercase tracking-tighter">Ready</div>
+            <div class="flex justify-center space-x-10">
+                <button id="timer-btn" onclick="toggleTimer()" class="btn-action text-green-500 text-6xl">▶</button>
+                <button onclick="resetTimer()" class="btn-action text-zinc-500 text-6xl">↺</button>
+            </div>
+        </div>
 
-            <!-- 頁面 5: 研磨度 -->
-            <div id="grind-page" class="scroll-area hidden">
-                <button onclick="router('home')" class="close-btn">返回</button>
-                <div class="toggle-tab">
-                    <button id="roast-light" onclick="setRoast('light')" class="toggle-btn">淺焙</button>
-                    <button id="roast-medium" onclick="setRoast('medium')" class="toggle-btn active">中焙</button>
-                    <button id="roast-dark" onclick="setRoast('dark')" class="toggle-btn">深焙</button>
-                </div>
-                <div id="grind-list" class="space-y-3"></div>
-                <div class="h-16"></div>
+        <!-- 頁面 5: 研磨度 -->
+        <div id="page-grind" class="page scroll-area hidden">
+            <button onclick="router('home')" class="bg-zinc-800 text-orange-400 px-8 py-2 rounded-full text-base font-black mb-6 border border-zinc-700">返回</button>
+            <div class="toggle-tab mb-6">
+                <button id="tbtn-light" class="tbtn" onclick="setRoast('light')">淺焙</button>
+                <button id="tbtn-medium" class="tbtn active" onclick="setRoast('medium')">中焙</button>
+                <button id="tbtn-dark" class="tbtn" onclick="setRoast('dark')">深焙</button>
             </div>
+            <div id="grind-list" class="space-y-3"></div>
         </div>
     </div>
 
@@ -275,157 +224,126 @@
         let timerId = null;
 
         function init() {
+            setupDragToScroll();
             renderMethods();
             renderGrind();
             renderCalc();
         }
 
-        function router(page) {
-            const pages = ['home-page', 'method-page', 'calc-page', 'timer-page', 'grind-page'];
-            pages.forEach(p => document.getElementById(p).classList.add('hidden'));
-            const target = document.getElementById(page + '-page');
-            target.classList.remove('hidden');
-            target.scrollTop = 0;
+        // --- 觸控滑動邏輯 ---
+        function setupDragToScroll() {
+            const areas = document.querySelectorAll('.scroll-area');
+            areas.forEach(area => {
+                let isDown = false, startY, scrollTop, moved = false;
+                const onDown = (e) => { isDown = true; moved = false; startY = (e.pageY || e.touches[0].pageY) - area.offsetTop; scrollTop = area.scrollTop; };
+                const onMove = (e) => {
+                    if (!isDown) return;
+                    const y = (e.pageY || e.touches[0].pageY) - area.offsetTop;
+                    const walk = (y - startY) * 1.5;
+                    area.scrollTop = scrollTop - walk;
+                    if (Math.abs(y - startY) > 5) moved = true;
+                };
+                const onUp = () => isDown = false;
+                area.addEventListener('mousedown', onDown); area.addEventListener('touchstart', onDown);
+                window.addEventListener('mousemove', onMove); window.addEventListener('touchmove', onMove, {passive: false});
+                window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
+                area.addEventListener('click', (e) => { if (moved) { e.stopPropagation(); e.preventDefault(); } }, true);
+            });
+        }
 
-            if(page === 'timer') {
-                document.getElementById('timer-target').innerText = `總水：${waterWeight}`;
-                document.getElementById('timer-bloom').innerText = `悶蒸：${Math.round(coffeeWeight * 2)}`;
-            }
+        function router(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page-' + page).classList.remove('hidden');
+            document.getElementById('page-' + page).scrollTop = 0;
+            if(page === 'timer') updateTimerUI();
             vibrate(15);
         }
 
         function renderMethods() {
             const list = document.getElementById('method-list');
-            if (!list) return;
             list.innerHTML = '';
             methods.forEach(m => {
                 const btn = document.createElement('button');
-                btn.className = 'method-btn';
-                btn.onclick = () => {
-                    currentMethod = m;
-                    syncValues();
-                    renderCalc();
-                    router('calc');
-                };
-                btn.innerHTML = `<span>${m.name}</span><span class="text-orange-500 font-mono text-xl">1:${m.ratio}</span>`;
+                btn.className = 'flex items-center justify-center gap-4 bg-[#111] p-6 rounded-3xl mb-2 w-full border-2 border-[#222] active:border-orange-500';
+                btn.onclick = () => { currentMethod = m; syncValues(); renderCalc(); router('calc'); };
+                btn.innerHTML = `<span class="text-3xl font-black">${m.name}</span><span class="text-orange-500 font-mono text-2xl">1:${m.ratio}</span>`;
                 list.appendChild(btn);
             });
         }
 
         function setCalcMode(mode) {
             calcMode = mode;
-            document.getElementById('mode-coffee').classList.toggle('active', mode === 'coffee');
-            document.getElementById('mode-water').classList.toggle('active', mode === 'water');
-            renderCalc();
-            vibrate(25);
+            if (mode === 'coffee') { coffeeWeight = Math.round(coffeeWeight); waterWeight = Math.round(coffeeWeight * currentMethod.ratio); }
+            else { waterWeight = Math.floor(waterWeight / 10) * 10; coffeeWeight = parseFloat((waterWeight / currentMethod.ratio).toFixed(1)); }
+            renderCalc(); vibrate(25);
         }
 
         function adjustValue(delta) {
-            if (calcMode === 'coffee') {
-                coffeeWeight = Math.max(1, coffeeWeight + delta);
-                waterWeight = Math.round(coffeeWeight * currentMethod.ratio);
-            } else {
-                waterWeight = Math.max(10, waterWeight + (delta * 10));
-                coffeeWeight = parseFloat((waterWeight / currentMethod.ratio).toFixed(1));
-            }
-            renderCalc();
-            vibrate(8);
+            if (calcMode === 'coffee') { coffeeWeight = Math.max(1, coffeeWeight + delta); waterWeight = Math.round(coffeeWeight * currentMethod.ratio); }
+            else { waterWeight = Math.max(10, waterWeight + (delta * 10)); coffeeWeight = parseFloat((waterWeight / currentMethod.ratio).toFixed(1)); }
+            renderCalc(); vibrate(8);
         }
 
         function syncValues() {
-            if (calcMode === 'coffee') {
-                waterWeight = Math.round(coffeeWeight * currentMethod.ratio);
-            } else {
-                coffeeWeight = parseFloat((waterWeight / currentMethod.ratio).toFixed(1));
-            }
+            if (calcMode === 'coffee') waterWeight = Math.round(coffeeWeight * currentMethod.ratio);
+            else coffeeWeight = parseFloat((waterWeight / currentMethod.ratio).toFixed(1));
         }
 
         function renderCalc() {
-            document.getElementById('input-label').innerText = calcMode === 'coffee' ? "Input Coffee (g)" : "Input Water (ml)";
-            document.getElementById('result-label').innerText = calcMode === 'coffee' ? "目標水量 (ml)" : "所需粉量 (g)";
-            document.getElementById('main-val').innerText = calcMode === 'coffee' ? coffeeWeight : waterWeight;
-            document.getElementById('result-val').innerText = calcMode === 'coffee' ? waterWeight : coffeeWeight;
+            document.getElementById('display-coffee').innerText = coffeeWeight;
+            document.getElementById('display-water').innerText = waterWeight;
             document.getElementById('calc-method-tag').innerText = `${currentMethod.name} (1:${currentMethod.ratio})`;
+            document.getElementById('tbtn-coffee').classList.toggle('active', calcMode === 'coffee');
+            document.getElementById('tbtn-water').classList.toggle('active', calcMode === 'water');
+            document.getElementById('card-coffee').className = `calc-card ${calcMode === 'coffee' ? 'active-coffee' : ''}`;
+            document.getElementById('card-water').className = `calc-card ${calcMode === 'water' ? 'active-water' : ''}`;
+            document.getElementById('display-coffee').className = `text-4xl font-black tabular-nums mt-1 ${calcMode === 'coffee' ? 'text-orange-500' : 'text-zinc-500'}`;
+            document.getElementById('display-water').className = `text-4xl font-black tabular-nums mt-1 ${calcMode === 'water' ? 'text-blue-500' : 'text-zinc-500'}`;
         }
 
         function setRoast(level) {
             roastLevel = level;
-            ['light', 'medium', 'dark'].forEach(l => {
-                document.getElementById(`roast-${l}`).classList.toggle('active', roastLevel === l);
-            });
-            renderGrind();
-            vibrate(20);
+            document.getElementById('tbtn-light').classList.toggle('active', level === 'light');
+            document.getElementById('tbtn-medium').classList.toggle('active', level === 'medium');
+            document.getElementById('tbtn-dark').classList.toggle('active', level === 'dark');
+            renderGrind(); vibrate(20);
         }
 
         function renderGrind() {
             const list = document.getElementById('grind-list');
-            if (!list) return;
             list.innerHTML = '';
             methods.forEach(m => {
                 const div = document.createElement('div');
-                div.className = 'grind-item';
+                div.className = 'bg-[#111] p-6 rounded-3xl mb-2 border-2 border-[#222] text-center';
                 let grindText = m.baseGrind;
                 if (roastLevel === 'light' && m.baseGrind === '粗') grindText = '中粗';
                 else if (roastLevel === 'dark' && m.baseGrind === '中細') grindText = '中';
-
-                div.innerHTML = `
-                    <div class="flex justify-center gap-4 items-center mb-1">
-                        <span class="text-3xl font-black">${m.name}</span>
-                        <span class="text-3xl text-orange-500 font-black">${grindText}</span>
-                    </div>
-                    <div class="text-lg text-zinc-500 font-bold">對標：${m.desc}</div>
-                `;
+                div.innerHTML = `<div class="flex justify-center gap-4 items-center mb-1"><span class="text-3xl font-black">${m.name}</span><span class="text-3xl text-orange-500 font-black">${grindText}</span></div><div class="text-xl text-zinc-500 font-bold">對標：${m.desc}</div>`;
                 list.appendChild(div);
             });
         }
 
         function toggleTimer() {
             const btn = document.getElementById('timer-btn');
-            if (timerId) {
-                clearInterval(timerId);
-                timerId = null;
-                btn.innerHTML = '▶';
-                btn.classList.replace('text-red-500', 'text-green-500');
-            } else {
-                btn.innerHTML = '‖';
-                btn.classList.replace('text-green-500', 'text-red-500');
-                timerId = setInterval(() => {
-                    seconds++;
-                    updateTimerDisplay();
-                }, 1000);
-                vibrate(30);
-            }
+            if (timerId) { clearInterval(timerId); timerId = null; btn.innerHTML = '▶'; btn.className = 'btn-action text-green-500 text-6xl'; }
+            else { btn.innerHTML = '‖'; btn.className = 'btn-action text-red-500 text-6xl'; timerId = setInterval(() => { seconds++; updateTimerUI(); }, 1000); vibrate(30); }
         }
 
-        function updateTimerDisplay() {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
+        function updateTimerUI() {
+            const mins = Math.floor(seconds / 60), secs = seconds % 60;
             document.getElementById('timer-display').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            const phase = document.getElementById('phase-text');
-            if (seconds > 0 && seconds <= 30) {
-                phase.innerText = `悶蒸: ${Math.round(coffeeWeight * 2)}ml`;
-                phase.style.color = "#f97316";
-            } else if (seconds > 30) {
-                phase.innerText = "穩定注水中...";
-                phase.style.color = "#3b82f6";
-            }
-            if (seconds === 30 || seconds === 120) vibrate([100, 50, 100]);
+            const phase = document.getElementById('phase-text'), target = document.getElementById('target-ml');
+            const b = Math.round(coffeeWeight * 2), s1 = Math.round(waterWeight * 0.6), s2 = waterWeight;
+            if (seconds === 0) { phase.innerText = "Ready"; target.innerText = b + "ml"; target.style.color = "#f97316"; }
+            else if (seconds <= 30) { phase.innerText = "BLOOM (悶蒸)"; target.innerText = b + "ml"; target.style.color = "#f97316"; }
+            else if (seconds <= 75) { phase.innerText = "1st Pour (階段一)"; target.innerText = s1 + "ml"; target.style.color = "#3b82f6"; }
+            else if (seconds <= 120) { phase.innerText = "Final Pour (階段二)"; target.innerText = s2 + "ml"; target.style.color = "#22d3ee"; }
+            else { phase.innerText = "DRAW DOWN (滴濾)"; target.innerText = "Finish"; target.style.color = "#22c55e"; }
+            if ([30, 75, 120].includes(seconds)) vibrate([200, 100, 200]);
         }
 
-        function resetTimer() {
-            clearInterval(timerId);
-            timerId = null;
-            seconds = 0;
-            updateTimerDisplay();
-            document.getElementById('phase-text').innerText = "READY";
-            document.getElementById('phase-text').style.color = "#f97316";
-            const btn = document.getElementById('timer-btn');
-            btn.innerHTML = '▶';
-            btn.classList.replace('text-red-500', 'text-green-500');
-        }
-
+        function resetTimer() { clearInterval(timerId); timerId = null; seconds = 0; updateTimerUI(); document.getElementById('timer-btn').innerHTML = '▶'; document.getElementById('timer-btn').className = 'btn-action text-green-500 text-6xl'; }
         function vibrate(p) { if(window.navigator.vibrate) window.navigator.vibrate(p); }
-        
         init();
     </script>
 </body>
