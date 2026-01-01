@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Barista Wrist Pro - Large UI</title>
+    <title>Barista Wrist Pro - Ultra Accessibility</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -19,7 +19,6 @@
             user-select: none;
         }
         
-        /* 針對圓形與方形手錶優化的容器 */
         .watch-container {
             width: 100vw;
             height: 100vh;
@@ -35,91 +34,82 @@
             width: 100%;
             height: 100%;
             overflow-y: auto;
-            /* 預設邊距 */
             padding: 40px 10px; 
             text-align: center;
             scrollbar-width: none;
         }
         .scroll-area::-webkit-scrollbar { display: none; }
         
-        /* 圓形螢幕自動適應：增加頂部和底部間距以確保內容在圓心 */
+        /* 圓形螢幕適應 */
         @media (aspect-ratio: 1/1) {
             .scroll-area {
-                padding-top: 50px;
-                padding-bottom: 50px;
+                padding-top: 55px;
+                padding-bottom: 55px;
             }
         }
 
-        /* 加大圓形按鈕 */
-        .btn-circle {
-            width: 70px;
-            height: 70px;
+        /* 主選單：左圖右文設計 */
+        .main-menu-btn {
+            background: #111;
+            padding: 16px 18px;
+            border-radius: 24px;
+            margin-bottom: 12px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px; 
+            border: 2px solid #222;
+        }
+        .main-menu-btn:active { border-color: #f97316; background: #222; }
+
+        /* 特大圓形按鈕 */
+        .btn-action {
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #1a1a1a;
-            border: 2px solid #333;
+            border: 3px solid #333;
             transition: all 0.1s;
         }
-        .btn-circle:active { transform: scale(0.9); background: #333; border-color: #f97316; }
-        
-        /* 加大功能鍵：改為水平排列（左圖右文） */
-        .main-menu-btn {
-            background: #111;
-            padding: 15px 20px;
-            border-radius: 24px;
-            margin-bottom: 10px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start; /* 靠左對齊 */
-            gap: 20px; /* 圖文間距 */
-            border: 2px solid #222;
-        }
-        .main-menu-btn:active { border-color: #f97316; background: #222; }
+        .btn-action:active { transform: scale(0.9); border-color: #f97316; }
 
-        .list-item {
-            background: #111;
-            padding: 18px;
-            border-radius: 20px;
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            font-size: 16px;
-            border: 1px solid #222;
-        }
-        
-        .method-btn {
-            background: #111;
-            padding: 18px 20px;
-            border-radius: 22px;
-            margin-bottom: 10px;
-            width: 100%;
+        /* 計算器專用：巨型加減按鈕 */
+        .calc-adjust-btn {
+            width: 85px; /* 進一步加大 */
+            height: 85px;
+            background: #1a1a1a;
+            border: 4px solid #f97316;
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            font-size: 18px;
+            justify-content: center;
+            font-size: 50px;
+            color: #f97316;
             font-weight: bold;
-            border: 1px solid #222;
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
         }
+        .calc-adjust-btn:active { background: #f97316; color: #fff; }
 
+        /* 切換標籤放大 */
         .toggle-tab {
             background: #1a1a1a;
             padding: 4px;
-            border-radius: 25px;
+            border-radius: 30px;
             display: inline-flex;
             margin-bottom: 15px;
-            border: 1px solid #333;
-            width: 90%;
+            border: 2px solid #333;
+            width: 100%;
         }
         .toggle-btn {
-            padding: 10px 0;
+            padding: 12px 0;
             flex: 1;
-            border-radius: 20px;
-            font-size: 15px;
-            font-weight: bold;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 900;
             color: #888;
         }
         .toggle-btn.active {
@@ -130,13 +120,38 @@
         .close-btn {
             background: #222;
             color: #ff914d;
-            padding: 8px 24px;
-            border-radius: 18px;
-            font-size: 14px;
+            padding: 10px 30px;
+            border-radius: 20px;
+            font-size: 16px;
             font-weight: 900;
             margin-bottom: 20px;
             display: inline-block;
-            border: 1px solid #333;
+            border: 2px solid #333;
+        }
+
+        /* 優化後列表：縮小中間空隙 */
+        .method-btn {
+            background: #111;
+            padding: 20px 18px;
+            border-radius: 22px;
+            margin-bottom: 10px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 改為置中 */
+            gap: 15px; /* 控制左右間距 */
+            font-size: 24px;
+            font-weight: 900;
+            border: 1px solid #222;
+        }
+
+        .grind-item {
+            background: #111;
+            padding: 18px;
+            border-radius: 22px;
+            margin-bottom: 10px;
+            border: 1px solid #222;
+            text-align: center;
         }
     </style>
 </head>
@@ -144,92 +159,86 @@
 
     <div id="app">
         <div class="watch-container">
-            <!-- 頁面 1: 主選單 (左圖右文，大字體版) -->
+            <!-- 頁面 1: 主選單 -->
             <div id="home-page" class="scroll-area">
-                <div class="text-orange-500 text-sm font-black mb-4 tracking-widest uppercase italic">BARISTA PRO</div>
-                
-                <div class="flex flex-col space-y-3 w-full">
-                    <button onclick="router('method')" class="main-menu-btn">
-                        <span class="text-4xl">☕</span>
-                        <span class="text-xl font-black">選器具</span>
-                    </button>
+                <div class="text-orange-500 text-xs font-black mb-4 tracking-widest uppercase italic">BARISTA PRO</div>
+                <div class="flex flex-col w-full">
                     <button onclick="router('calc')" class="main-menu-btn">
-                        <span class="text-4xl">⚖️</span>
-                        <span class="text-xl font-black">計算器</span>
+                        <span class="text-5xl">⚖️</span>
+                        <span class="text-2xl font-black">計算器</span>
+                    </button>
+                    <button onclick="router('method')" class="main-menu-btn">
+                        <span class="text-5xl">☕</span>
+                        <span class="text-2xl font-black">選器具</span>
                     </button>
                     <button onclick="router('timer')" class="main-menu-btn">
-                        <span class="text-4xl">⏱️</span>
-                        <span class="text-xl font-black">計時器</span>
+                        <span class="text-5xl">⏱️</span>
+                        <span class="text-2xl font-black">計時器</span>
                     </button>
                     <button onclick="router('grind')" class="main-menu-btn">
-                        <span class="text-4xl">⚙️</span>
-                        <span class="text-xl font-black">研磨度</span>
+                        <span class="text-5xl">⚙️</span>
+                        <span class="text-2xl font-black">研磨度</span>
                     </button>
                 </div>
-                <div class="h-12"></div>
+                <div class="h-16"></div>
             </div>
 
             <!-- 頁面 2: 器具選擇 -->
             <div id="method-page" class="scroll-area hidden">
-                <button onclick="router('home')" class="close-btn">返回首頁</button>
+                <button onclick="router('home')" class="close-btn">返回</button>
                 <div id="method-list" class="space-y-2"></div>
-                <div class="h-12"></div>
+                <div class="h-16"></div>
             </div>
 
-            <!-- 頁面 3: 雙向計算器 (特大數字) -->
+            <!-- 頁面 3: 雙向計算器 (按鈕極大化) -->
             <div id="calc-page" class="scroll-area hidden">
                 <button onclick="router('home')" class="close-btn">返回</button>
-                
                 <div class="toggle-tab">
                     <button id="mode-coffee" onclick="setCalcMode('coffee')" class="toggle-btn active">粉量</button>
                     <button id="mode-water" onclick="setCalcMode('water')" class="toggle-btn">水量</button>
                 </div>
-
                 <div class="mb-4">
-                    <div id="input-label" class="text-sm text-zinc-500 font-bold uppercase">Coffee (g)</div>
-                    <div class="flex items-center justify-between px-2 my-2">
-                        <button onclick="adjustValue(-1)" class="text-4xl text-orange-500 w-14 h-14 flex items-center justify-center bg-zinc-900 rounded-full active:bg-zinc-800 border-2 border-zinc-700">－</button>
-                        <span id="main-val" class="text-6xl font-black tabular-nums">15</span>
-                        <button onclick="adjustValue(1)" class="text-4xl text-orange-500 w-14 h-14 flex items-center justify-center bg-zinc-900 rounded-full active:bg-zinc-800 border-2 border-zinc-700">＋</button>
+                    <div id="input-label" class="text-xs text-zinc-500 font-black mb-2 uppercase">Input Coffee (g)</div>
+                    <div class="flex items-center justify-between px-0 my-2">
+                        <button onclick="adjustValue(-1)" class="calc-adjust-btn">－</button>
+                        <span id="main-val" class="text-7xl font-black tabular-nums leading-none">15</span>
+                        <button onclick="adjustValue(1)" class="calc-adjust-btn">＋</button>
                     </div>
                 </div>
-
-                <div class="bg-zinc-900/50 p-5 rounded-[30px] border-2 border-zinc-800">
-                    <div id="result-label" class="text-sm text-zinc-500 font-bold">目標水量 (ml)</div>
-                    <div id="result-val" class="text-5xl font-black text-blue-500 tabular-nums">225</div>
-                    <div id="calc-method-tag" class="text-sm text-zinc-400 mt-2 font-bold italic">V60 (1:15)</div>
+                <div class="bg-blue-600/20 p-6 rounded-[35px] border-2 border-blue-500/50">
+                    <div id="result-label" class="text-sm text-blue-300 font-bold mb-1">目標水量 (ml)</div>
+                    <div id="result-val" class="text-6xl font-black text-white tabular-nums leading-none">225</div>
+                    <div id="calc-method-tag" class="text-base text-blue-400 mt-2 font-black italic">V60 (1:15)</div>
                 </div>
-                <div class="h-12"></div>
+                <div class="h-16"></div>
             </div>
 
-            <!-- 頁面 4: 計時器 (高對比特大號) -->
+            <!-- 頁面 4: 計時器 (字體放大優化) -->
             <div id="timer-page" class="scroll-area hidden">
                 <button onclick="router('home')" class="close-btn">返回</button>
-                <div class="flex justify-between px-2 text-xs font-bold text-zinc-400 mb-2">
-                    <span id="timer-target">總水：225</span>
-                    <span id="timer-bloom" class="text-orange-400">悶蒸：30</span>
+                <div class="flex flex-col space-y-1 mb-4 px-2">
+                    <div id="timer-target" class="text-xl font-black text-zinc-300">總水：225</div>
+                    <div id="timer-bloom" class="text-xl font-black text-orange-400">悶蒸：30</div>
                 </div>
-                <div id="timer-display" class="text-7xl font-mono font-black mb-2 tracking-tighter tabular-nums text-white">00:00</div>
-                <div id="phase-text" class="text-lg font-black text-orange-500 h-8 mb-6 uppercase">READY</div>
-                <div class="flex justify-center space-x-6">
-                    <button id="timer-btn" onclick="toggleTimer()" class="btn-circle text-green-500 text-4xl">▶</button>
-                    <button onclick="resetTimer()" class="btn-circle text-zinc-500 text-4xl">↺</button>
+                <div id="timer-display" class="text-8xl font-mono font-black mb-4 tabular-nums text-white leading-none">00:00</div>
+                <div id="phase-text" class="text-2xl font-black text-orange-500 h-8 mb-8 uppercase">READY</div>
+                <div class="flex justify-center space-x-8">
+                    <button id="timer-btn" onclick="toggleTimer()" class="btn-action text-green-500 text-5xl">▶</button>
+                    <button onclick="resetTimer()" class="btn-action text-zinc-500 text-5xl">↺</button>
                 </div>
-                <div class="h-12"></div>
+                <div class="h-16"></div>
             </div>
 
             <!-- 頁面 5: 研磨度 -->
             <div id="grind-page" class="scroll-area hidden">
                 <button onclick="router('home')" class="close-btn">返回</button>
-                
-                <div class="toggle-tab mx-auto">
-                    <button id="roast-light" onclick="setRoast('light')" class="toggle-btn">淺</button>
-                    <button id="roast-medium" onclick="setRoast('medium')" class="toggle-btn active">中</button>
-                    <button id="roast-dark" onclick="setRoast('dark')" class="toggle-btn">深</button>
+                <div class="toggle-tab">
+                    <button id="roast-light" onclick="setRoast('light')" class="toggle-btn">淺焙</button>
+                    <button id="roast-medium" onclick="setRoast('medium')" class="toggle-btn active">中焙</button>
+                    <button id="roast-dark" onclick="setRoast('dark')" class="toggle-btn">深焙</button>
                 </div>
-
-                <div id="grind-list" class="space-y-3 px-2 text-left"></div>
-                <div class="h-12"></div>
+                <div id="grind-list" class="space-y-3"></div>
+                <div class="h-16"></div>
             </div>
         </div>
     </div>
@@ -263,12 +272,12 @@
             const target = document.getElementById(page + '-page');
             target.classList.remove('hidden');
             target.scrollTop = 0;
-            
+
             if(page === 'timer') {
                 document.getElementById('timer-target').innerText = `總水：${waterWeight}`;
                 document.getElementById('timer-bloom').innerText = `悶蒸：${Math.round(coffeeWeight * 2)}`;
             }
-            vibrate(10);
+            vibrate(15);
         }
 
         function renderMethods() {
@@ -283,7 +292,8 @@
                     renderCalc();
                     router('calc');
                 };
-                btn.innerHTML = `<span>${m.name}</span><span class="text-sm text-orange-500">1:${m.ratio}</span>`;
+                // 優化：縮小中間空隙，使用固定間距
+                btn.innerHTML = `<span>${m.name}</span><span class="text-orange-500 font-mono text-xl">1:${m.ratio}</span>`;
                 list.appendChild(btn);
             });
         }
@@ -293,7 +303,7 @@
             document.getElementById('mode-coffee').classList.toggle('active', mode === 'coffee');
             document.getElementById('mode-water').classList.toggle('active', mode === 'water');
             renderCalc();
-            vibrate(15);
+            vibrate(25);
         }
 
         function adjustValue(delta) {
@@ -305,7 +315,7 @@
                 coffeeWeight = parseFloat((waterWeight / currentMethod.ratio).toFixed(1));
             }
             renderCalc();
-            vibrate(5);
+            vibrate(8);
         }
 
         function syncValues() {
@@ -317,7 +327,7 @@
         }
 
         function renderCalc() {
-            document.getElementById('input-label').innerText = calcMode === 'coffee' ? "Coffee (g)" : "Water (ml)";
+            document.getElementById('input-label').innerText = calcMode === 'coffee' ? "Input Coffee (g)" : "Input Water (ml)";
             document.getElementById('result-label').innerText = calcMode === 'coffee' ? "目標水量 (ml)" : "所需粉量 (g)";
             document.getElementById('main-val').innerText = calcMode === 'coffee' ? coffeeWeight : waterWeight;
             document.getElementById('result-val').innerText = calcMode === 'coffee' ? waterWeight : coffeeWeight;
@@ -335,22 +345,24 @@
 
         function renderGrind() {
             const list = document.getElementById('grind-list');
+            if (!list) return;
             list.innerHTML = '';
             methods.forEach(m => {
-                const item = document.createElement('div');
-                item.className = 'list-item';
+                const div = document.createElement('div');
+                div.className = 'grind-item';
                 let grindText = m.baseGrind;
                 if (roastLevel === 'light' && m.baseGrind === '粗') grindText = '中粗';
                 else if (roastLevel === 'dark' && m.baseGrind === '中細') grindText = '中';
 
-                item.innerHTML = `
-                    <div class="flex justify-between w-full font-black mb-1">
-                        <span class="text-lg">${m.name}</span>
-                        <span class="text-orange-500 text-lg">${grindText}</span>
+                // 優化：縮小顯示間距，集中視覺
+                div.innerHTML = `
+                    <div class="flex justify-center gap-4 items-center mb-1">
+                        <span class="text-3xl font-black">${m.name}</span>
+                        <span class="text-3xl text-orange-500 font-black">${grindText}</span>
                     </div>
-                    <div class="text-sm text-zinc-500 font-bold">對標：${m.desc}</div>
+                    <div class="text-lg text-zinc-500 font-bold">對標：${m.desc}</div>
                 `;
-                list.appendChild(item);
+                list.appendChild(div);
             });
         }
 
@@ -368,7 +380,7 @@
                     seconds++;
                     updateTimerDisplay();
                 }, 1000);
-                vibrate(20);
+                vibrate(30);
             }
         }
 
@@ -381,7 +393,7 @@
                 phase.innerText = `悶蒸: ${Math.round(coffeeWeight * 2)}ml`;
                 phase.style.color = "#f97316";
             } else if (seconds > 30) {
-                phase.innerText = "穩壓注水中...";
+                phase.innerText = "穩定注水中...";
                 phase.style.color = "#3b82f6";
             }
             if (seconds === 30 || seconds === 120) vibrate([100, 50, 100]);
@@ -400,6 +412,7 @@
         }
 
         function vibrate(p) { if(window.navigator.vibrate) window.navigator.vibrate(p); }
+        
         init();
     </script>
 </body>
